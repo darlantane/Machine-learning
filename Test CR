@@ -1,0 +1,103 @@
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+
+train_data = pd.read_excel("C:/Users/stagiaireprodaad/OneDrive - SAINTE LUCIE/Bureau/ML/L48.xlsx")
+
+X_train = train_data[["QTE FAB", "TO", "MO", "AMP01", "AMP02", "AM001"]].values
+
+#y_train = train_data[["%OBJECTIF", "%TRS", "%REGLAGE", "%NETTOYAGE", "%PANNE", "PRODUCTIVITE"]].values#
+
+y_train_objectif = train_data["%OBJECTIF"].values
+y_train_trs = train_data["%TRS"].values
+y_train_reglage = train_data["%REGLAGE"].values
+y_train_nettoyage = train_data["%NETTOYAGE"].values
+y_train_panne = train_data["%PANNE"].values
+y_train_productivite = train_data["PRODUCTIVITE"].values
+
+#model = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(6,)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(6)
+])#
+
+model_objectif = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(6,)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(6)
+])
+
+model_trs = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(6,)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(6)
+])
+
+model_reglage = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(6,)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(6)
+])
+
+model_nettoyage = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(6,)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(6)
+])
+
+model_panne = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(6,)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(6)
+])
+
+model_productivite = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(6,)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(6)
+])
+
+model_objectif.compile(optimizer='adam', loss='mean_squared_error')
+model_trs.compile(optimizer='adam', loss='mean_squared_error')
+model_reglage.compile(optimizer='adam', loss='mean_squared_error')
+model_nettoyage.compile(optimizer='adam', loss='mean_squared_error')
+model_panne.compile(optimizer='adam', loss='mean_squared_error')
+model_productivite.compile(optimizer='adam', loss='mean_squared_error')
+
+#model.fit(X_train, y_train, epochs=100, batch_size=32)#
+
+model_objectif.fit(X_train, y_train_objectif, epochs=100, batch_size=32)
+model_trs.fit(X_train, y_train_trs, epochs=100, batch_size=32)
+model_reglage.fit(X_train, y_train_reglage, epochs=100, batch_size=32)
+model_nettoyage.fit(X_train, y_train_nettoyage, epochs=100, batch_size=32)
+model_panne.fit(X_train, y_train_panne, epochs=100, batch_size=32)
+model_productivite.fit(X_train, y_train_productivite, epochs=100, batch_size=32)
+
+nouvelles_donnees = pd.DataFrame({
+    "QTE FAB": [4000, 10000, 15000],
+    "TO": [30, 39, 72],
+    "MO": [50, 100, 200],
+    "AMP01": [100, 150, 200],
+    "AMP02": [100, 150, 200],
+    "AM001": [20000, 30000, 40000]
+    })
+
+
+X_new = nouvelles_donnees.values
+
+#predictions = model.predict(X_new)#
+
+predictions_objectif = model_objectif.predict(X_new)
+predictions_trs = model_trs.predict(X_new)
+predictions_reglage = model_reglage.predict(X_new)
+predictions_nettoyage = model_nettoyage.predict(X_new)
+predictions_panne = model_panne.predict(X_new)
+predictions_productivite = model_productivite.predict(X_new)
+
+
+print("Prédictions %objectif :", predictions_objectif)
+print("Prédictions %trs :", predictions_trs)
+print("Prédictions %Reglage :", predictions_reglage)
+print("Prédictions %nettoyage :", predictions_nettoyage)
+print("Prédictions %panne :", predictions_panne)
+print("Prédictions productivité :", predictions_productivite)
